@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Wishlist</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        background: #0f1117;
+        color: white;
+        min-height: 100vh;
+    }
+
+    header {
+        text-align: center;
+        padding: 50px 20px 30px;
+    }
+
+    h1 {
+        margin: 0;
+        font-size: 42px;
+    }
+
+    header p {
+        color: #9ca3af;
+        margin-top: 10px;
+    }
+
+    .wishlist {
+        width: min(1000px, 92%);
+        margin: 0 auto 50px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 20px;
+    }
+
+    .item {
+        background: #181b24;
+        border: 1px solid #292e3b;
+        border-radius: 16px;
+        padding: 22px;
+        transition: 0.2s ease;
+    }
+
+    .item:hover {
+        transform: translateY(-4px);
+        border-color: #5865f2;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+    }
+
+    .item h2 {
+        margin: 0 0 10px;
+        font-size: 21px;
+    }
+
+    .item p {
+        color: #9ca3af;
+        font-size: 14px;
+        line-height: 1.5;
+        min-height: 42px;
+    }
+
+    .item a {
+        display: inline-block;
+        margin-top: 12px;
+        padding: 10px 16px;
+        background: #5865f2;
+        color: white;
+        text-decoration: none;
+        border-radius: 9px;
+        font-weight: bold;
+        transition: 0.2s;
+    }
+
+    .item a:hover {
+        background: #4752c4;
+    }
+
+    footer {
+        text-align: center;
+        color: #666;
+        padding: 20px;
+        font-size: 13px;
+    }
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>My Wishlist</h1>
+    <p>Stuff I want to get</p>
+</header>
+
+<main class="wishlist" id="wishlist"></main>
+
+<footer>
+    Wishlist
+</footer>
+
+<script>
+
+  //WISHLIST
+
+    const wishlist = [
+        {
+            name: "test",
+            description: "test",
+            link: "test.com"
+        },
+
+        // TEMPLATE
+        //
+        // {
+        //     name: "Item Name",
+        //     description: "Item description",
+        //     link: "https://website.com/item"
+        // }
+    ];
+
+    const container = document.getElementById("wishlist");
+
+    wishlist.forEach(item => {
+        const card = document.createElement("div");
+        card.className = "item";
+
+        card.innerHTML = `
+            <h2>${item.name}</h2>
+            <p>${item.description}</p>
+            <a href="${item.link}" target="_blank" rel="noopener noreferrer">
+                View Item →
+            </a>
+        `;
+
+        container.appendChild(card);
+    });
+</script>
+
+</body>
+</html>
