@@ -33,21 +33,22 @@
         margin-top: 10px;
     }
 
-    .wishlist {
-        width: min(1000px, 92%);
-        margin: 0 auto 50px;
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-        gap: 20px;
-    }
+   .wishlist {
+       width: min(1000px, 92%);
+       margin: 0 auto 50px;
+       display: flex;
+       flex-direction: column;
+       gap: 20px;
+   }
 
-    .item {
-        background: #181b24;
-        border: 1px solid #292e3b;
-        border-radius: 16px;
-        padding: 22px;
-        transition: 0.2s ease;
-    }
+   .item {
+       width: 100%;
+       background: #181b24;
+       border: 1px solid #292e3b;
+       border-radius: 16px;
+       padding: 22px;
+       transition: 0.2s ease;
+   }
 
     .item:hover {
         transform: translateY(-4px);
