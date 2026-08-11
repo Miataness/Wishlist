@@ -107,18 +107,13 @@
         position: fixed;
         top: 20px;
         left: 20px;
-
         background: #181b24;
         border: 1px solid #292e3b;
         border-radius: 10px;
-
         padding: 9px 13px;
-
         color: white;
         font-size: 14px;
-
         box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-
         z-index: 9999;
     }
 
@@ -134,24 +129,17 @@
         position: fixed;
         bottom: 25px;
         right: 25px;
-
         background: #181b24;
         color: white;
         border: 1px solid #292e3b;
         border-radius: 12px;
-
         padding: 16px 45px 16px 20px;
-
         min-width: 280px;
         max-width: 90vw;
-
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-
         transform: translateX(130%);
         opacity: 0;
-
         transition: all 0.4s ease;
-
         z-index: 9999;
     }
 
@@ -163,22 +151,19 @@
     .notification-message {
         font-weight: bold;
         font-size: 16px;
+        line-height: 1.4;
     }
 
     .notification-close {
         position: absolute;
         top: 8px;
         right: 10px;
-
         background: transparent;
         border: none;
-
         color: #9ca3af;
         font-size: 22px;
         line-height: 1;
-
         cursor: pointer;
-
         padding: 2px 5px;
         border-radius: 6px;
     }
@@ -219,15 +204,15 @@
     &times;
 </button>
 
-<div class="notification-message">
-    User counter added!, This webpage is constantly changing, drop in any time!
+<div class="notification-message" id="notificationMessage">
+    User counter added! This webpage is constantly changing, drop in any time!
 </div>
 ```
 
 </div>
 
 <!-- =========================
-     FIREBASE LIVE VIEWER SYSTEM
+     FIREBASE LIVE SYSTEM
      ========================= -->
 
 <script type="module">
@@ -241,7 +226,8 @@
         set,
         onValue,
         onDisconnect,
-        push
+        push,
+        onChildAdded
     } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-database.js";
 
     import {
@@ -278,7 +264,18 @@
 
 
     // =========================
-    // ANONYMOUS LOGIN
+    // PAGE LOAD TIME
+    // =========================
+
+    // Used so visitors don't receive
+    // notifications that were sent before
+    // they opened the website.
+
+    const pageLoadedAt = Date.now();
+
+
+    // =========================
+    // LIVE VIEWER SYSTEM
     // =========================
 
     signInAnonymously(auth)
@@ -287,14 +284,13 @@
 
             const viewersRef = ref(db, "viewers");
 
-            // Create a unique ID for THIS page/tab
+            // Create a unique ID for this tab
             const viewerRef = push(viewersRef);
 
-            // Tell Firebase to remove this viewer when the page disconnects.
+            // Remove this viewer when they disconnect
             onDisconnect(viewerRef).remove();
 
-
-            // Add this page as a viewer
+            // Add this viewer
             return set(viewerRef, {
                 online: true,
                 timestamp: Date.now()
@@ -312,9 +308,7 @@
         });
 
 
-    // =========================
-    // WATCH LIVE VIEWERS
-    // =========================
+    // Watch the viewer list
 
     const viewersRef = ref(db, "viewers");
 
@@ -332,6 +326,105 @@
         if (viewerNumber) {
             viewerNumber.textContent = count;
         }
+
+    });
+
+
+    // =========================
+    // LIVE NOTIFICATION RECEIVER
+    // =========================
+
+    const notificationsRef =
+        ref(db, "notifications");
+
+
+    onChildAdded(notificationsRef, (snapshot) => {
+
+        const notification = snapshot.val();
+
+        // Make sure the notification has
+        // the information we expect.
+
+        if (!notification) {
+            return;
+        }
+
+        if (!notification.message) {
+            return;
+        }
+
+        // Don't show old notifications
+        // to people who just opened the page.
+
+        if (
+            notification.timestamp &&
+            notification.timestamp <= pageLoadedAt
+        ) {
+            return;
+        }
+
+
+        // Show the notification
+
+        showLiveNotification(
+            notification.message
+        );
+
+    });
+
+
+    // =========================
+    // SHOW LIVE NOTIFICATION
+    // =========================
+
+    function showLiveNotification(message) {
+
+        const notification =
+            document.getElementById("notification");
+
+        const messageElement =
+            document.getElementById("notificationMessage");
+
+        if (!notification || !messageElement) {
+            return;
+        }
+
+
+        // Put the admin's message into
+        // the notification box.
+
+        messageElement.textContent = message;
+
+
+        // Show it
+
+        notification.classList.add("show");
+
+
+        // Automatically hide after 8 seconds
+
+        setTimeout(() => {
+
+            notification.classList.remove("show");
+
+        }, 8000);
+
+    }
+
+
+    // =========================
+    // CLOSE NOTIFICATION
+    // =========================
+
+    const closeButton =
+        document.getElementById("notificationClose");
+
+    closeButton.addEventListener("click", () => {
+
+        const notification =
+            document.getElementById("notification");
+
+        notification.classList.remove("show");
 
     });
 
@@ -437,44 +530,6 @@
 
 
         container.appendChild(card);
-
-    });
-
-
-    // =========================
-    // NOTIFICATION
-    // =========================
-
-    window.addEventListener("load", () => {
-
-        const notification =
-            document.getElementById("notification");
-
-        const closeButton =
-            document.getElementById("notificationClose");
-
-
-        setTimeout(() => {
-
-            notification.classList.add("show");
-
-        }, 300);
-
-
-        const autoClose = setTimeout(() => {
-
-            notification.classList.remove("show");
-
-        }, 5000);
-
-
-        closeButton.addEventListener("click", () => {
-
-            clearTimeout(autoClose);
-
-            notification.classList.remove("show");
-
-        });
 
     });
 
