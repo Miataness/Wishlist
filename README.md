@@ -1,1 +1,3 @@
 # Wishlist
+
+STATUS: OPERATIONAL
