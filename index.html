@@ -99,7 +99,6 @@
         font-size: 13px;
     }
 
-
     /* =========================
        LIVE VIEWER COUNTER
        ========================= */
@@ -108,20 +107,24 @@
         position: fixed;
         top: 20px;
         left: 20px;
+
         background: #181b24;
         border: 1px solid #292e3b;
         border-radius: 10px;
+
         padding: 9px 13px;
+
         color: white;
         font-size: 14px;
+
         box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+
         z-index: 9999;
     }
 
     #viewer-number {
         font-weight: bold;
     }
-
 
     /* =========================
        NOTIFICATION
@@ -131,17 +134,24 @@
         position: fixed;
         bottom: 25px;
         right: 25px;
+
         background: #181b24;
         color: white;
         border: 1px solid #292e3b;
         border-radius: 12px;
+
         padding: 16px 45px 16px 20px;
+
         min-width: 280px;
         max-width: 90vw;
+
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+
         transform: translateX(130%);
         opacity: 0;
+
         transition: all 0.4s ease;
+
         z-index: 9999;
     }
 
@@ -159,12 +169,16 @@
         position: absolute;
         top: 8px;
         right: 10px;
+
         background: transparent;
         border: none;
+
         color: #9ca3af;
         font-size: 22px;
         line-height: 1;
+
         cursor: pointer;
+
         padding: 2px 5px;
         border-radius: 6px;
     }
@@ -182,7 +196,7 @@
 <!-- LIVE VIEWER COUNTER -->
 
 <div id="viewer-count">
-    <span id="viewer-number">1</span> viewing
+    <span id="viewer-number">0</span> viewing
 </div>
 
 <header>
@@ -218,14 +232,16 @@
 
 <script type="module">
 
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
+    import { initializeApp }
+        from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
 
     import {
         getDatabase,
         ref,
         set,
         onValue,
-        onDisconnect
+        onDisconnect,
+        push
     } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-database.js";
 
     import {
@@ -234,7 +250,9 @@
     } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
 
 
-    // Firebase configuration
+    // =========================
+    // FIREBASE CONFIG
+    // =========================
 
     const firebaseConfig = {
         apiKey: "AIzaSyDySpfxTWNreWliWvLWMYmZ-ojTs9AChxo",
@@ -248,7 +266,9 @@
     };
 
 
-    // Initialize Firebase
+    // =========================
+    // INITIALIZE FIREBASE
+    // =========================
 
     const app = initializeApp(firebaseConfig);
 
@@ -257,30 +277,44 @@
     const auth = getAuth(app);
 
 
-    // Sign this visitor in anonymously
+    // =========================
+    // ANONYMOUS LOGIN
+    // =========================
 
     signInAnonymously(auth)
-        .then((userCredential) => {
 
-            const viewerId = userCredential.user.uid;
+        .then(() => {
 
-            const viewerRef =
-                ref(db, `viewers/${viewerId}`);
+            /*
+             * IMPORTANT:
+             *
+             * Do NOT use the Firebase user's UID
+             * as the viewer ID.
+             *
+             * Firebase can reuse the same anonymous
+             * account on the same device/browser.
+             *
+             * push() gives EVERY PAGE its own ID.
+             */
+
+            const viewersRef = ref(db, "viewers");
+
+            // Create a unique ID for THIS page/tab
+            const viewerRef = push(viewersRef);
+
+            // Tell Firebase to remove this viewer
+            // when the page disconnects.
+            onDisconnect(viewerRef).remove();
 
 
-            // Add this visitor
-
-            set(viewerRef, {
+            // Add this page as a viewer
+            return set(viewerRef, {
                 online: true,
                 timestamp: Date.now()
             });
 
-
-            // Remove visitor when they leave
-
-            onDisconnect(viewerRef).remove();
-
         })
+
         .catch((error) => {
 
             console.error(
@@ -291,10 +325,11 @@
         });
 
 
-    // Watch the viewer list
+    // =========================
+    // WATCH LIVE VIEWERS
+    // =========================
 
     const viewersRef = ref(db, "viewers");
-
 
     onValue(viewersRef, (snapshot) => {
 
@@ -304,10 +339,8 @@
             ? Object.keys(viewers).length
             : 0;
 
-
         const viewerNumber =
             document.getElementById("viewer-number");
-
 
         if (viewerNumber) {
             viewerNumber.textContent = count;
@@ -329,7 +362,7 @@
             name: "AMD Ryzen 5 7600X",
             description: "New CPU, (IF YOU BUY ME THIS, I WILL ALSO NEED THE MSI MAG X870E TOMAHAWK WIFI AND (2X16) DDR5 5000mhz Corsair Vengence RAM)",
             price: "$210.99",
-            link: "https://www.bestbuy.com/product/amd-ryzen-5-7600x-6-core-12-thread-4-7ghz-5-3-ghz-max-boost-socket-am5-pci-express-5-0-unlocked-desktop-processor-silver/JXKQHH52CT/sku/6519479?utm_source=feed&extStoreId=646"
+            link: "https://www.bestbuy.com/product/amd-ryzen-5-7600x-6-core-12-thread-4-7ghz-5-3-ghz-max-boost-socket-am5-pci-express-5-0-unlocked-desktop-processor-silver/JXKQHH52CT/sku/6519479"
         },
 
         {
@@ -377,7 +410,9 @@
     ];
 
 
-    // Create wishlist items
+    // =========================
+    // CREATE WISHLIST ITEMS
+    // =========================
 
     const container =
         document.getElementById("wishlist");
@@ -432,8 +467,6 @@
             document.getElementById("notificationClose");
 
 
-        // Slide notification in
-
         setTimeout(() => {
 
             notification.classList.add("show");
@@ -441,16 +474,12 @@
         }, 300);
 
 
-        // Automatically close after 5 seconds
-
         const autoClose = setTimeout(() => {
 
             notification.classList.remove("show");
 
         }, 5000);
 
-
-        // Close with X
 
         closeButton.addEventListener("click", () => {
 
