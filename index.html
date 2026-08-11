@@ -99,6 +99,35 @@
         font-size: 13px;
     }
 
+
+    /* =========================
+       LIVE VIEWER COUNTER
+       ========================= */
+
+    #viewer-count {
+        position: fixed;
+        top: 20px;
+        left: 20px;
+
+        background: #181b24;
+        border: 1px solid #292e3b;
+        border-radius: 10px;
+
+        padding: 9px 13px;
+
+        color: white;
+        font-size: 14px;
+
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+
+        z-index: 9999;
+    }
+
+    #viewer-number {
+        font-weight: bold;
+    }
+
+
     /* =========================
        NOTIFICATION
        ========================= */
@@ -159,6 +188,12 @@
 
 <body>
 
+<!-- LIVE VIEWER COUNTER -->
+
+<div id="viewer-count">
+    🟢 <span id="viewer-number">1</span> watching
+</div>
+
 <header>
     <h1>Miataness' Wishlist</h1>
     <p>buy me shi please im broke</p>
@@ -173,21 +208,125 @@
 <!-- NOTIFICATION -->
 
 <div class="notification" id="notification">
-    <button class="notification-close" id="notificationClose">&times;</button>
 
+```
+<button class="notification-close" id="notificationClose">
+    &times;
+</button>
 
 <div class="notification-message">
     SUSPECTED DOWNTIME, POTENTIALLY ADDING LIVE USER COUNTER
 </div>
-
+```
 
 </div>
 
-<script>
+<!-- =========================
+     FIREBASE LIVE VIEWER SYSTEM
+     ========================= -->
 
-    // =========================
-    // WISHLIST
-    // =========================
+<script type="module">
+
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
+
+    import {
+        getDatabase,
+        ref,
+        set,
+        onValue,
+        onDisconnect
+    } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-database.js";
+
+
+    // Firebase configuration
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyDySpfxTWNreWliWvLWMYmZ-ojTs9AChxo",
+        authDomain: "wishlist-4a068.firebaseapp.com",
+        databaseURL: "https://wishlist-4a068-default-rtdb.firebaseio.com",
+        projectId: "wishlist-4a068",
+        storageBucket: "wishlist-4a068.firebasestorage.app",
+        messagingSenderId: "208154215703",
+        appId: "1:208154215703:web:ddd158ba075c7aad57a352",
+        measurementId: "G-405630WFE4"
+    };
+
+
+    // Initialize Firebase
+
+    const app = initializeApp(firebaseConfig);
+
+    const db = getDatabase(app);
+
+
+    // Give every visitor a unique ID
+
+    const viewerId = crypto.randomUUID();
+
+    const viewerRef = ref(db, `viewers/${viewerId}`);
+
+
+    // Add this visitor to the database
+
+    set(viewerRef, {
+        online: true,
+        timestamp: Date.now()
+    });
+
+
+    // Automatically remove this visitor when they leave
+
+    onDisconnect(viewerRef).remove();
+
+
+    // Watch the viewer list
+
+    const viewersRef = ref(db, "viewers");
+
+
+    onValue(viewersRef, (snapshot) => {
+
+        const viewers = snapshot.val();
+
+        const count = viewers
+            ? Object.keys(viewers).length
+            : 0;
+
+
+        const viewerNumber =
+            document.getElementById("viewer-number");
+
+
+        const viewerCount =
+            document.getElementById("viewer-count");
+
+
+        if (viewerNumber) {
+            viewerNumber.textContent = count;
+        }
+
+
+        if (viewerCount) {
+
+            if (count === 1) {
+                viewerCount.innerHTML =
+                    `🟢 <span id="viewer-number">${count}</span> person watching`;
+            } else {
+                viewerCount.innerHTML =
+                    `🟢 <span id="viewer-number">${count}</span> people watching`;
+            }
+
+        }
+
+    });
+
+</script>
+
+<!-- =========================
+     WISHLIST
+     ========================= -->
+
+<script>
 
     const wishlist = [
 
@@ -202,7 +341,7 @@
             name: "MSI Mag X870E Tomahawk",
             description: "New Motherboard, (IF YOU BUY ME THIS, I WILL ALSO NEED THE AMD RYZEN 5 7600X AND (2X16) DDR5 5000mhz Corsair Vengence RAM)",
             price: "$269.99",
-            link: "https://www.bestbuy.com/product/msi-mag-x870e-tomahawk-wifi-socket-am5-amd-x870-atx-ddr5-wi-fi-7-motherboard-black/J3P7TX6LJP/sku/6616917?utm_source=feed&extStoreId=&ref=212&loc=18472327090&gclsrc=aw.ds&gad_source=1&gad_campaignid=18472338646&gclid=Cj0KCQjw7eXTBhDBARIsAKF-w447rk7DYOyPk54n54g4Khlxg9rpUIjJfCmuOECVUf982Vo3Nn5aKl0aAvp9EALw_wcB"
+            link: "https://www.bestbuy.com/product/msi-mag-x870e-tomahawk-wifi-socket-am5-amd-x870-atx-ddr5-wi-fi-7-motherboard-black/J3P7TX6LJP/sku/6616917"
         },
 
         {
@@ -243,18 +382,22 @@
     ];
 
 
-    // =========================
-    // CREATE WISHLIST ITEMS
-    // =========================
+    // Create wishlist items
 
-    const container = document.getElementById("wishlist");
+    const container =
+        document.getElementById("wishlist");
+
 
     wishlist.forEach(item => {
 
-        const card = document.createElement("div");
+        const card =
+            document.createElement("div");
+
         card.className = "item";
 
+
         card.innerHTML = `
+
             <h2>${item.name}</h2>
 
             <div class="price">
@@ -265,12 +408,19 @@
                 ${item.description}
             </p>
 
-            <a href="${item.link}" target="_blank" rel="noopener noreferrer">
+            <a
+                href="${item.link}"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
                 View Item →
             </a>
+
         `;
 
+
         container.appendChild(card);
+
     });
 
 
@@ -280,23 +430,39 @@
 
     window.addEventListener("load", () => {
 
-        const notification = document.getElementById("notification");
-        const closeButton = document.getElementById("notificationClose");
+        const notification =
+            document.getElementById("notification");
+
+        const closeButton =
+            document.getElementById("notificationClose");
+
 
         // Slide notification in
+
         setTimeout(() => {
+
             notification.classList.add("show");
+
         }, 300);
 
+
         // Automatically close after 5 seconds
+
         const autoClose = setTimeout(() => {
+
             notification.classList.remove("show");
+
         }, 5000);
 
-        // Close when X is clicked
+
+        // Close with X
+
         closeButton.addEventListener("click", () => {
+
             clearTimeout(autoClose);
+
             notification.classList.remove("show");
+
         });
 
     });
