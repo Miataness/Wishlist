@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+```
 <title>Wishlist Admin</title>
 
 <style>
-
     * {
         box-sizing: border-box;
     }
@@ -23,28 +24,30 @@
         color: white;
 
         display: flex;
-        align-items: center;
         justify-content: center;
+        align-items: center;
 
         padding: 20px;
     }
 
     .container {
-        width: min(600px, 100%);
+        width: 100%;
+        max-width: 500px;
+    }
 
+    .panel {
         background: #181b24;
-
         border: 1px solid #292e3b;
         border-radius: 16px;
 
         padding: 30px;
 
-        box-shadow: 0 10px 40px rgba(0,0,0,0.35);
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
     }
 
     h1 {
-        margin-top: 0;
-        margin-bottom: 8px;
+        margin: 0 0 8px;
+        font-size: 30px;
     }
 
     .subtitle {
@@ -58,6 +61,7 @@
         margin-bottom: 8px;
 
         font-weight: bold;
+        font-size: 14px;
     }
 
     input,
@@ -91,14 +95,12 @@
     }
 
     button {
+        width: 100%;
+
         border: none;
-
-        background: #5865f2;
-        color: white;
-
-        padding: 12px 18px;
-
         border-radius: 9px;
+
+        padding: 12px 16px;
 
         font-size: 15px;
         font-weight: bold;
@@ -108,64 +110,86 @@
         transition: 0.2s;
     }
 
-    button:hover {
+    .login-button,
+    .send-button {
+        background: #5865f2;
+        color: white;
+    }
+
+    .login-button:hover,
+    .send-button:hover {
         background: #4752c4;
     }
 
-    button:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
-    }
-
-    .logout {
+    .logout-button {
         background: #292e3b;
-        margin-left: 8px;
+        color: white;
+
+        margin-top: 10px;
     }
 
-    .logout:hover {
+    .logout-button:hover {
         background: #3a4050;
     }
 
-    .error {
-        color: #ff6b6b;
-        margin-top: 15px;
+    .hidden {
+        display: none;
+    }
+
+    .status {
+        margin-top: 18px;
+
+        padding: 12px;
+
+        border-radius: 9px;
+
+        background: #0f1117;
+
+        color: #9ca3af;
+
+        font-size: 14px;
+
+        line-height: 1.4;
     }
 
     .success {
         color: #57f287;
-        margin-top: 15px;
     }
 
-    .admin-panel {
-        display: none;
+    .error {
+        color: #ed4245;
     }
 
-    .admin-panel.show {
-        display: block;
+    .admin-badge {
+        display: inline-block;
+
+        background: rgba(88, 101, 242, 0.15);
+        color: #7289da;
+
+        border: 1px solid rgba(88, 101, 242, 0.3);
+
+        padding: 5px 9px;
+
+        border-radius: 7px;
+
+        font-size: 12px;
+        font-weight: bold;
+
+        margin-bottom: 20px;
     }
 
-    .login-panel.hide {
-        display: none;
+    .char-count {
+        text-align: right;
+
+        color: #666;
+
+        font-size: 12px;
+
+        margin-top: -12px;
+        margin-bottom: 15px;
     }
-
-    .current {
-        margin-top: 25px;
-
-        padding: 15px;
-
-        background: #0f1117;
-
-        border: 1px solid #292e3b;
-        border-radius: 10px;
-
-        color: #9ca3af;
-    }
-
-    .current strong {
-        color: white;
-    }
-
 </style>
+```
 
 </head>
 
@@ -174,16 +198,17 @@
 <div class="container">
 
 ```
-<h1>Wishlist Admin</h1>
+<!-- =========================
+     LOGIN
+     ========================= -->
 
-<div class="subtitle">
-    Send notifications to everyone currently viewing the wishlist.
-</div>
+<div class="panel" id="loginPanel">
 
+    <h1>Wishlist Admin</h1>
 
-<!-- LOGIN -->
-
-<div class="login-panel" id="loginPanel">
+    <div class="subtitle">
+        Sign in to manage the wishlist notifications.
+    </div>
 
     <label for="email">
         Email
@@ -192,7 +217,8 @@
     <input
         type="email"
         id="email"
-        placeholder="Your Firebase email"
+        placeholder="Your Firebase admin email"
+        autocomplete="username"
     >
 
 
@@ -203,69 +229,99 @@
     <input
         type="password"
         id="password"
-        placeholder="Your password"
+        placeholder="Your Firebase password"
+        autocomplete="current-password"
     >
 
 
-    <button id="loginButton">
-        Login
+    <button
+        class="login-button"
+        id="loginButton"
+    >
+        Sign In
     </button>
 
 
-    <div class="error" id="loginError"></div>
+    <div
+        class="status hidden"
+        id="loginStatus"
+    ></div>
 
 </div>
 
 
-<!-- ADMIN PANEL -->
+<!-- =========================
+     ADMIN PANEL
+     ========================= -->
 
-<div class="admin-panel" id="adminPanel">
+<div
+    class="panel hidden"
+    id="adminPanel"
+>
+
+    <div class="admin-badge">
+        ADMIN MODE
+    </div>
+
+    <h1>Send Notification</h1>
+
+    <div class="subtitle">
+        Send a live notification to everyone currently viewing the wishlist.
+    </div>
+
 
     <label for="message">
-        Notification
+        Notification Message
     </label>
 
     <textarea
         id="message"
-        placeholder="Type your notification here..."
+        maxlength="250"
+        placeholder="Example: 🔥 NEW ITEM ADDED TO THE WISHLIST!"
     ></textarea>
 
-
-    <button id="sendButton">
-        Send to Everyone
-    </button>
-
-
-    <button class="logout" id="logoutButton">
-        Logout
-    </button>
-
-
-    <div class="success" id="successMessage"></div>
-
-    <div class="error" id="sendError"></div>
-
-
-    <div class="current">
-
-        <strong>Current notification:</strong>
-
-        <div id="currentNotification">
-            None
-        </div>
-
+    <div
+        class="char-count"
+        id="charCount"
+    >
+        0 / 250
     </div>
+
+
+    <button
+        class="send-button"
+        id="sendButton"
+    >
+        Send Notification
+    </button>
+
+
+    <div
+        class="status hidden"
+        id="sendStatus"
+    ></div>
+
+
+    <button
+        class="logout-button"
+        id="logoutButton"
+    >
+        Sign Out
+    </button>
 
 </div>
 ```
 
 </div>
 
+<!-- =========================
+     FIREBASE
+     ========================= -->
+
 <script type="module">
 
-    import {
-        initializeApp
-    } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
+    import { initializeApp }
+        from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
 
 
     import {
@@ -273,16 +329,17 @@
         signInWithEmailAndPassword,
         onAuthStateChanged,
         signOut
-    } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
+    }
+        from "https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
 
 
     import {
         getDatabase,
         ref,
-        set,
-        onValue,
-        serverTimestamp
-    } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-database.js";
+        push,
+        set
+    }
+        from "https://www.gstatic.com/firebasejs/12.17.1/firebase-database.js";
 
 
     // =========================
@@ -291,14 +348,17 @@
 
     const firebaseConfig = {
 
-        apiKey: "AIzaSyDySpfxTWNreWliWvLWMYmZ-ojTs9AChxo",
+        apiKey:
+            "AIzaSyDySpfxTWNreWliWvLWMYmZ-ojTs9AChxo",
 
-        authDomain: "wishlist-4a068.firebaseapp.com",
+        authDomain:
+            "wishlist-4a068.firebaseapp.com",
 
         databaseURL:
             "https://wishlist-4a068-default-rtdb.firebaseio.com",
 
-        projectId: "wishlist-4a068",
+        projectId:
+            "wishlist-4a068",
 
         storageBucket:
             "wishlist-4a068.firebasestorage.app",
@@ -315,14 +375,16 @@
 
 
     // =========================
-    // INITIALIZE
+    // INITIALIZE FIREBASE
     // =========================
 
     const app =
         initializeApp(firebaseConfig);
 
+
     const auth =
         getAuth(app);
+
 
     const db =
         getDatabase(app);
@@ -338,35 +400,68 @@
     const adminPanel =
         document.getElementById("adminPanel");
 
+    const emailInput =
+        document.getElementById("email");
+
+    const passwordInput =
+        document.getElementById("password");
+
     const loginButton =
         document.getElementById("loginButton");
 
-    const logoutButton =
-        document.getElementById("logoutButton");
+    const loginStatus =
+        document.getElementById("loginStatus");
+
+    const messageInput =
+        document.getElementById("message");
 
     const sendButton =
         document.getElementById("sendButton");
 
-    const email =
-        document.getElementById("email");
+    const sendStatus =
+        document.getElementById("sendStatus");
 
-    const password =
-        document.getElementById("password");
+    const logoutButton =
+        document.getElementById("logoutButton");
 
-    const message =
-        document.getElementById("message");
+    const charCount =
+        document.getElementById("charCount");
 
-    const loginError =
-        document.getElementById("loginError");
 
-    const sendError =
-        document.getElementById("sendError");
+    // =========================
+    // STATUS HELPERS
+    // =========================
 
-    const successMessage =
-        document.getElementById("successMessage");
+    function showLoginStatus(message, type) {
 
-    const currentNotification =
-        document.getElementById("currentNotification");
+        loginStatus.textContent = message;
+
+        loginStatus.classList.remove(
+            "hidden",
+            "success",
+            "error"
+        );
+
+        if (type) {
+            loginStatus.classList.add(type);
+        }
+    }
+
+
+    function showSendStatus(message, type) {
+
+        sendStatus.textContent = message;
+
+        sendStatus.classList.remove(
+            "hidden",
+            "success",
+            "error"
+        );
+
+        if (type) {
+            sendStatus.classList.add(type);
+        }
+    }
 
 
     // =========================
@@ -377,23 +472,69 @@
         "click",
         async () => {
 
-            loginError.textContent = "";
+            const email =
+                emailInput.value.trim();
+
+            const password =
+                passwordInput.value;
+
+
+            if (!email || !password) {
+
+                showLoginStatus(
+                    "Enter your email and password.",
+                    "error"
+                );
+
+                return;
+            }
+
+
+            loginButton.disabled = true;
+
+            loginButton.textContent =
+                "Signing in...";
+
 
             try {
 
                 await signInWithEmailAndPassword(
                     auth,
-                    email.value,
-                    password.value
+                    email,
+                    password
                 );
 
-            } catch (error) {
+            }
+
+            catch (error) {
 
                 console.error(error);
 
-                loginError.textContent =
-                    "Login failed. Check your email and password.";
+                showLoginStatus(
+                    "Login failed. Check your email and password.",
+                    "error"
+                );
 
+                loginButton.disabled = false;
+
+                loginButton.textContent =
+                    "Sign In";
+            }
+
+        }
+    );
+
+
+    // =========================
+    // ENTER KEY LOGIN
+    // =========================
+
+    passwordInput.addEventListener(
+        "keydown",
+        (event) => {
+
+            if (event.key === "Enter") {
+                loginButton.click();
             }
 
         }
@@ -410,20 +551,34 @@
 
             if (user) {
 
-                loginPanel.classList.add("hide");
+                // User is signed in.
 
-                adminPanel.classList.add("show");
+                loginPanel.classList.add(
+                    "hidden"
+                );
+
+                adminPanel.classList.remove(
+                    "hidden"
+                );
 
                 console.log(
-                    "Logged in UID:",
+                    "Signed in UID:",
                     user.uid
                 );
 
-            } else {
+            }
 
-                loginPanel.classList.remove("hide");
+            else {
 
-                adminPanel.classList.remove("show");
+                // Nobody is signed in.
+
+                loginPanel.classList.remove(
+                    "hidden"
+                );
+
+                adminPanel.classList.add(
+                    "hidden"
+                );
 
             }
 
@@ -439,17 +594,16 @@
         "click",
         async () => {
 
-            const text =
-                message.value.trim();
-
-            sendError.textContent = "";
-            successMessage.textContent = "";
+            const message =
+                messageInput.value.trim();
 
 
-            if (!text) {
+            if (!message) {
 
-                sendError.textContent =
-                    "Type a notification first.";
+                showSendStatus(
+                    "Type a notification first.",
+                    "error"
+                );
 
                 return;
             }
@@ -463,28 +617,49 @@
 
             try {
 
+                const notificationsRef =
+                    ref(db, "notifications");
+
+
+                // Generate a unique notification ID.
+
+                const notificationRef =
+                    push(notificationsRef);
+
+
+                // Send notification to Firebase.
+
                 await set(
-                    ref(db, "notification"),
+                    notificationRef,
                     {
-                        message: text,
-                        timestamp: serverTimestamp()
+                        message: message,
+                        timestamp: Date.now()
                     }
                 );
 
 
-                successMessage.textContent =
-                    "Notification sent!";
+                // Clear textbox.
+
+                messageInput.value = "";
+
+                updateCharacterCount();
 
 
-                message.value = "";
+                showSendStatus(
+                    "✓ Notification sent to everyone viewing the site.",
+                    "success"
+                );
 
+            }
 
-            } catch (error) {
+            catch (error) {
 
                 console.error(error);
 
-                sendError.textContent =
-                    "You don't have permission to send notifications.";
+                showSendStatus(
+                    "Failed to send notification. Check your Firebase database rules.",
+                    "error"
+                );
 
             }
 
@@ -492,14 +667,32 @@
             sendButton.disabled = false;
 
             sendButton.textContent =
-                "Send to Everyone";
+                "Send Notification";
 
         }
     );
 
 
     // =========================
-    // LOGOUT
+    // CHARACTER COUNTER
+    // =========================
+
+    function updateCharacterCount() {
+
+        charCount.textContent =
+            `${messageInput.value.length} / 250`;
+
+    }
+
+
+    messageInput.addEventListener(
+        "input",
+        updateCharacterCount
+    );
+
+
+    // =========================
+    // SIGN OUT
     // =========================
 
     logoutButton.addEventListener(
@@ -507,33 +700,6 @@
         async () => {
 
             await signOut(auth);
-
-        }
-    );
-
-
-    // =========================
-    // SHOW CURRENT NOTIFICATION
-    // =========================
-
-    onValue(
-        ref(db, "notification"),
-        (snapshot) => {
-
-            const data =
-                snapshot.val();
-
-            if (data && data.message) {
-
-                currentNotification.textContent =
-                    data.message;
-
-            } else {
-
-                currentNotification.textContent =
-                    "None";
-
-            }
 
         }
     );
