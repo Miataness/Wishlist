@@ -392,10 +392,12 @@ async function setupPushNotifications() {
          * Register Firebase's messaging service worker.
          */
 
-        const registration =
-            await navigator.serviceWorker.register(
-                "/firebase-messaging-sw.js"
-            );
+    const registration = await navigator.serviceWorker.register(
+        "/Wishlist/firebase-messaging-sw.js",
+        {
+            scope: "/Wishlist/"
+        }
+    );
 
 
         /*
