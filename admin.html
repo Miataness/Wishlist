@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Wishlist Admin</title>
+
+<style>
+
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        min-height: 100vh;
+
+        font-family: Arial, Helvetica, sans-serif;
+
+        background: #0f1117;
+        color: white;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        padding: 20px;
+    }
+
+    .container {
+        width: min(600px, 100%);
+
+        background: #181b24;
+
+        border: 1px solid #292e3b;
+        border-radius: 16px;
+
+        padding: 30px;
+
+        box-shadow: 0 10px 40px rgba(0,0,0,0.35);
+    }
+
+    h1 {
+        margin-top: 0;
+        margin-bottom: 8px;
+    }
+
+    .subtitle {
+        color: #9ca3af;
+        margin-bottom: 30px;
+    }
+
+    label {
+        display: block;
+
+        margin-bottom: 8px;
+
+        font-weight: bold;
+    }
+
+    input,
+    textarea {
+        width: 100%;
+
+        background: #0f1117;
+        color: white;
+
+        border: 1px solid #292e3b;
+        border-radius: 9px;
+
+        padding: 12px;
+
+        font-family: inherit;
+        font-size: 15px;
+
+        outline: none;
+
+        margin-bottom: 18px;
+    }
+
+    input:focus,
+    textarea:focus {
+        border-color: #5865f2;
+    }
+
+    textarea {
+        min-height: 120px;
+        resize: vertical;
+    }
+
+    button {
+        border: none;
+
+        background: #5865f2;
+        color: white;
+
+        padding: 12px 18px;
+
+        border-radius: 9px;
+
+        font-size: 15px;
+        font-weight: bold;
+
+        cursor: pointer;
+
+        transition: 0.2s;
+    }
+
+    button:hover {
+        background: #4752c4;
+    }
+
+    button:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    .logout {
+        background: #292e3b;
+        margin-left: 8px;
+    }
+
+    .logout:hover {
+        background: #3a4050;
+    }
+
+    .error {
+        color: #ff6b6b;
+        margin-top: 15px;
+    }
+
+    .success {
+        color: #57f287;
+        margin-top: 15px;
+    }
+
+    .admin-panel {
+        display: none;
+    }
+
+    .admin-panel.show {
+        display: block;
+    }
+
+    .login-panel.hide {
+        display: none;
+    }
+
+    .current {
+        margin-top: 25px;
+
+        padding: 15px;
+
+        background: #0f1117;
+
+        border: 1px solid #292e3b;
+        border-radius: 10px;
+
+        color: #9ca3af;
+    }
+
+    .current strong {
+        color: white;
+    }
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+```
+<h1>Wishlist Admin</h1>
+
+<div class="subtitle">
+    Send notifications to everyone currently viewing the wishlist.
+</div>
+
+
+<!-- LOGIN -->
+
+<div class="login-panel" id="loginPanel">
+
+    <label for="email">
+        Email
+    </label>
+
+    <input
+        type="email"
+        id="email"
+        placeholder="Your Firebase email"
+    >
+
+
+    <label for="password">
+        Password
+    </label>
+
+    <input
+        type="password"
+        id="password"
+        placeholder="Your password"
+    >
+
+
+    <button id="loginButton">
+        Login
+    </button>
+
+
+    <div class="error" id="loginError"></div>
+
+</div>
+
+
+<!-- ADMIN PANEL -->
+
+<div class="admin-panel" id="adminPanel">
+
+    <label for="message">
+        Notification
+    </label>
+
+    <textarea
+        id="message"
+        placeholder="Type your notification here..."
+    ></textarea>
+
+
+    <button id="sendButton">
+        Send to Everyone
+    </button>
+
+
+    <button class="logout" id="logoutButton">
+        Logout
+    </button>
+
+
+    <div class="success" id="successMessage"></div>
+
+    <div class="error" id="sendError"></div>
+
+
+    <div class="current">
+
+        <strong>Current notification:</strong>
+
+        <div id="currentNotification">
+            None
+        </div>
+
+    </div>
+
+</div>
+```
+
+</div>
+
+<script type="module">
+
+    import {
+        initializeApp
+    } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
+
+
+    import {
+        getAuth,
+        signInWithEmailAndPassword,
+        onAuthStateChanged,
+        signOut
+    } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
+
+
+    import {
+        getDatabase,
+        ref,
+        set,
+        onValue,
+        serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-database.js";
+
+
+    // =========================
+    // FIREBASE CONFIG
+    // =========================
+
+    const firebaseConfig = {
+
+        apiKey: "AIzaSyDySpfxTWNreWliWvLWMYmZ-ojTs9AChxo",
+
+        authDomain: "wishlist-4a068.firebaseapp.com",
+
+        databaseURL:
+            "https://wishlist-4a068-default-rtdb.firebaseio.com",
+
+        projectId: "wishlist-4a068",
+
+        storageBucket:
+            "wishlist-4a068.firebasestorage.app",
+
+        messagingSenderId:
+            "208154215703",
+
+        appId:
+            "1:208154215703:web:ddd158ba075c7aad57a352",
+
+        measurementId:
+            "G-405630WFE4"
+    };
+
+
+    // =========================
+    // INITIALIZE
+    // =========================
+
+    const app =
+        initializeApp(firebaseConfig);
+
+    const auth =
+        getAuth(app);
+
+    const db =
+        getDatabase(app);
+
+
+    // =========================
+    // ELEMENTS
+    // =========================
+
+    const loginPanel =
+        document.getElementById("loginPanel");
+
+    const adminPanel =
+        document.getElementById("adminPanel");
+
+    const loginButton =
+        document.getElementById("loginButton");
+
+    const logoutButton =
+        document.getElementById("logoutButton");
+
+    const sendButton =
+        document.getElementById("sendButton");
+
+    const email =
+        document.getElementById("email");
+
+    const password =
+        document.getElementById("password");
+
+    const message =
+        document.getElementById("message");
+
+    const loginError =
+        document.getElementById("loginError");
+
+    const sendError =
+        document.getElementById("sendError");
+
+    const successMessage =
+        document.getElementById("successMessage");
+
+    const currentNotification =
+        document.getElementById("currentNotification");
+
+
+    // =========================
+    // LOGIN
+    // =========================
+
+    loginButton.addEventListener(
+        "click",
+        async () => {
+
+            loginError.textContent = "";
+
+            try {
+
+                await signInWithEmailAndPassword(
+                    auth,
+                    email.value,
+                    password.value
+                );
+
+            } catch (error) {
+
+                console.error(error);
+
+                loginError.textContent =
+                    "Login failed. Check your email and password.";
+
+            }
+
+        }
+    );
+
+
+    // =========================
+    // AUTH STATE
+    // =========================
+
+    onAuthStateChanged(
+        auth,
+        (user) => {
+
+            if (user) {
+
+                loginPanel.classList.add("hide");
+
+                adminPanel.classList.add("show");
+
+                console.log(
+                    "Logged in UID:",
+                    user.uid
+                );
+
+            } else {
+
+                loginPanel.classList.remove("hide");
+
+                adminPanel.classList.remove("show");
+
+            }
+
+        }
+    );
+
+
+    // =========================
+    // SEND NOTIFICATION
+    // =========================
+
+    sendButton.addEventListener(
+        "click",
+        async () => {
+
+            const text =
+                message.value.trim();
+
+            sendError.textContent = "";
+            successMessage.textContent = "";
+
+
+            if (!text) {
+
+                sendError.textContent =
+                    "Type a notification first.";
+
+                return;
+            }
+
+
+            sendButton.disabled = true;
+
+            sendButton.textContent =
+                "Sending...";
+
+
+            try {
+
+                await set(
+                    ref(db, "notification"),
+                    {
+                        message: text,
+                        timestamp: serverTimestamp()
+                    }
+                );
+
+
+                successMessage.textContent =
+                    "Notification sent!";
+
+
+                message.value = "";
+
+
+            } catch (error) {
+
+                console.error(error);
+
+                sendError.textContent =
+                    "You don't have permission to send notifications.";
+
+            }
+
+
+            sendButton.disabled = false;
+
+            sendButton.textContent =
+                "Send to Everyone";
+
+        }
+    );
+
+
+    // =========================
+    // LOGOUT
+    // =========================
+
+    logoutButton.addEventListener(
+        "click",
+        async () => {
+
+            await signOut(auth);
+
+        }
+    );
+
+
+    // =========================
+    // SHOW CURRENT NOTIFICATION
+    // =========================
+
+    onValue(
+        ref(db, "notification"),
+        (snapshot) => {
+
+            const data =
+                snapshot.val();
+
+            if (data && data.message) {
+
+                currentNotification.textContent =
+                    data.message;
+
+            } else {
+
+                currentNotification.textContent =
+                    "None";
+
+            }
+
+        }
+    );
+
+</script>
+
+</body>
+</html>
