@@ -7,171 +7,178 @@
 <title>Miataness' Wishlist</title>
 
 <style>
-    * {
-        box-sizing: border-box;
-    }
+* {
+    box-sizing: border-box;
+}
 
-    body {
-        margin: 0;
-        font-family: Arial, Helvetica, sans-serif;
-        background: #0f1117;
-        color: white;
-        min-height: 100vh;
-    }
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #0f1117;
+    color: white;
+    min-height: 100vh;
+}
 
-    header {
-        text-align: center;
-        padding: 50px 20px 30px;
-    }
+header {
+    text-align: center;
+    padding: 50px 20px 30px;
+}
 
-    h1 {
-        margin: 0;
-        font-size: 42px;
-    }
+h1 {
+    margin: 0;
+    font-size: 42px;
+}
 
-    header p {
-        color: #9ca3af;
-        margin-top: 10px;
-    }
+header p {
+    color: #9ca3af;
+    margin-top: 10px;
+}
 
-    .wishlist {
-        width: min(1000px, 92%);
-        margin: 0 auto 50px;
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-    }
+.wishlist {
+    width: min(1000px, 92%);
+    margin: 0 auto 50px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
 
-    .item {
-        width: 100%;
-        background: #181b24;
-        border: 1px solid #292e3b;
-        border-radius: 16px;
-        padding: 22px;
-        transition: 0.2s ease;
-    }
+.item {
+    width: 100%;
+    background: #181b24;
+    border: 1px solid #292e3b;
+    border-radius: 16px;
+    padding: 22px;
+    transition: 0.2s ease;
+}
 
-    .item:hover {
-        transform: translateY(-4px);
-        border-color: #5865f2;
-        box-shadow: 0 8px 25px rgba(0,0,0,0.25);
-    }
+.item:hover {
+    transform: translateY(-4px);
+    border-color: #5865f2;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+}
 
-    .item h2 {
-        margin: 0 0 10px;
-        font-size: 21px;
-    }
+.item h2 {
+    margin: 0 0 10px;
+    font-size: 21px;
+}
 
-    .item p {
-        color: #9ca3af;
-        font-size: 14px;
-        line-height: 1.5;
-        min-height: 42px;
-    }
+.item p {
+    color: #9ca3af;
+    font-size: 14px;
+    line-height: 1.5;
+    min-height: 42px;
+}
 
-    .price {
-        color: #5865f2;
-        font-size: 20px;
-        font-weight: bold;
-        margin-bottom: 8px;
-    }
+.price {
+    color: #5865f2;
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
 
-    .item a {
-        display: inline-block;
-        margin-top: 12px;
-        padding: 10px 16px;
-        background: #5865f2;
-        color: white;
-        text-decoration: none;
-        border-radius: 9px;
-        font-weight: bold;
-        transition: 0.2s;
-    }
+.item a {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 10px 16px;
+    background: #5865f2;
+    color: white;
+    text-decoration: none;
+    border-radius: 9px;
+    font-weight: bold;
+    transition: 0.2s;
+}
 
-    .item a:hover {
-        background: #4752c4;
-    }
+.item a:hover {
+    background: #4752c4;
+}
 
-    footer {
-        text-align: center;
-        color: #666;
-        padding: 20px;
-        font-size: 13px;
-    }
+footer {
+    text-align: center;
+    color: #666;
+    padding: 20px;
+    font-size: 13px;
+}
 
-    /* =========================
-       LIVE VIEWER COUNTER
-       ========================= */
+/* =========================
+   LIVE VIEWER COUNTER
+   ========================= */
 
-    #viewer-count {
-        position: fixed;
-        top: 20px;
-        left: 20px;
-        background: #181b24;
-        border: 1px solid #292e3b;
-        border-radius: 10px;
-        padding: 9px 13px;
-        color: white;
-        font-size: 14px;
-        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-        z-index: 9999;
-    }
+#viewer-count {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background: #181b24;
+    border: 1px solid #292e3b;
+    border-radius: 10px;
+    padding: 9px 13px;
+    color: white;
+    font-size: 14px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+    z-index: 9999;
+}
 
-    #viewer-number {
-        font-weight: bold;
-    }
+#viewer-number {
+    font-weight: bold;
+}
 
-    /* =========================
-       NOTIFICATION
-       ========================= */
+/* =========================
+   NOTIFICATION
+   ========================= */
 
-    .notification {
-        position: fixed;
-        bottom: 25px;
-        right: 25px;
-        background: #181b24;
-        color: white;
-        border: 1px solid #292e3b;
-        border-radius: 12px;
-        padding: 16px 45px 16px 20px;
-        min-width: 280px;
-        max-width: 90vw;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-        transform: translateX(130%);
-        opacity: 0;
-        transition: all 0.4s ease;
-        z-index: 9999;
-    }
+.notification {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    background: #181b24;
+    color: white;
+    border: 1px solid #292e3b;
+    border-radius: 12px;
+    padding: 16px 45px 16px 20px;
+    min-width: 280px;
+    max-width: 90vw;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
 
-    .notification.show {
-        transform: translateX(0);
-        opacity: 1;
-    }
+    transform: translateX(130%);
+    opacity: 0;
 
-    .notification-message {
-        font-weight: bold;
-        font-size: 16px;
-        line-height: 1.4;
-    }
+    transition: all 0.4s ease;
 
-    .notification-close {
-        position: absolute;
-        top: 8px;
-        right: 10px;
-        background: transparent;
-        border: none;
-        color: #9ca3af;
-        font-size: 22px;
-        line-height: 1;
-        cursor: pointer;
-        padding: 2px 5px;
-        border-radius: 6px;
-    }
+    z-index: 9999;
+}
 
-    .notification-close:hover {
-        color: white;
-        background: #292e3b;
-    }
+.notification.show {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.notification-message {
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 1.4;
+}
+
+.notification-close {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+
+    background: transparent;
+    border: none;
+
+    color: #9ca3af;
+    font-size: 22px;
+    line-height: 1;
+
+    cursor: pointer;
+
+    padding: 2px 5px;
+    border-radius: 6px;
+}
+
+.notification-close:hover {
+    color: white;
+    background: #292e3b;
+}
 </style>
 
 </head>
@@ -195,320 +202,717 @@
     Wishlist
 </footer>
 
-<!-- NOTIFICATION -->
+<!-- LIVE POPUP NOTIFICATION -->
 
 <div class="notification" id="notification">
 
 ```
-<button class="notification-close" id="notificationClose">
+<button
+    class="notification-close"
+    id="notificationClose">
     &times;
 </button>
 
-<div class="notification-message" id="notificationMessage">
-    User counter added! This webpage is constantly changing, drop in any time!
+<div
+    class="notification-message"
+    id="notificationMessage">
+    User counter added! This webpage is constantly changing,
+    drop in any time!
 </div>
 ```
 
 </div>
 
-<!-- =========================
-     FIREBASE LIVE SYSTEM
-     ========================= -->
-
 <script type="module">
 
-    import { initializeApp }
-        from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
+/* =========================================================
+   FIREBASE IMPORTS
+   ========================================================= */
 
-    import {
-        getDatabase,
-        ref,
-        set,
-        onValue,
-        onDisconnect,
-        push,
-        onChildAdded
-    } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-database.js";
+import {
+    initializeApp
+} from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
 
-    import {
-        getAuth,
-        signInAnonymously
-    } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
+import {
+    getDatabase,
+    ref,
+    set,
+    onValue,
+    onDisconnect,
+    push,
+    onChildAdded
+} from "https://www.gstatic.com/firebasejs/12.17.1/firebase-database.js";
 
+import {
+    getAuth,
+    signInAnonymously
+} from "https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
 
-    // =========================
-    // FIREBASE CONFIG
-    // =========================
-
-    const firebaseConfig = {
-        apiKey: "AIzaSyDySpfxTWNreWliWvLWMYmZ-ojTs9AChxo",
-        authDomain: "wishlist-4a068.firebaseapp.com",
-        databaseURL: "https://wishlist-4a068-default-rtdb.firebaseio.com",
-        projectId: "wishlist-4a068",
-        storageBucket: "wishlist-4a068.firebasestorage.app",
-        messagingSenderId: "208154215703",
-        appId: "1:208154215703:web:ddd158ba075c7aad57a352",
-        measurementId: "G-405630WFE4"
-    };
+import {
+    getMessaging,
+    getToken,
+    onMessage
+} from "https://www.gstatic.com/firebasejs/12.17.1/firebase-messaging.js";
 
 
-    // =========================
-    // INITIALIZE FIREBASE
-    // =========================
+/* =========================================================
+   FIREBASE CONFIG
+   ========================================================= */
 
-    const app = initializeApp(firebaseConfig);
+const firebaseConfig = {
 
-    const db = getDatabase(app);
+    apiKey:
+        "AIzaSyDySpfxTWNreWliWvLWMYmZ-ojTs9AChxo",
 
-    const auth = getAuth(app);
+    authDomain:
+        "wishlist-4a068.firebaseapp.com",
+
+    databaseURL:
+        "https://wishlist-4a068-default-rtdb.firebaseio.com",
+
+    projectId:
+        "wishlist-4a068",
+
+    storageBucket:
+        "wishlist-4a068.firebasestorage.app",
+
+    messagingSenderId:
+        "208154215703",
+
+    appId:
+        "1:208154215703:web:ddd158ba075c7aad57a352",
+
+    measurementId:
+        "G-405630WFE4"
+};
 
 
-    // =========================
-    // PAGE LOAD TIME
-    // =========================
+/* =========================================================
+   YOUR FIREBASE WEB PUSH VAPID PUBLIC KEY
+   =========================================================
 
-    // Used so visitors don't receive
-    // notifications that were sent before
-    // they opened the website.
+   IMPORTANT:
 
-    const pageLoadedAt = Date.now();
+   Replace this with your PUBLIC VAPID key from:
+
+   Firebase Console
+   → Project Settings
+   → Cloud Messaging
+   → Web configuration
+   → Web Push certificates
+
+   DO NOT put your private VAPID key here.
+   ========================================================= */
+
+const VAPID_PUBLIC_KEY =
+    "PASTE_YOUR_PUBLIC_VAPID_KEY_HERE";
 
 
-    // =========================
-    // LIVE VIEWER SYSTEM
-    // =========================
+/* =========================================================
+   INITIALIZE FIREBASE
+   ========================================================= */
 
-    signInAnonymously(auth)
+const app =
+    initializeApp(firebaseConfig);
 
-        .then(() => {
+const db =
+    getDatabase(app);
 
-            const viewersRef = ref(db, "viewers");
+const auth =
+    getAuth(app);
 
-            // Create a unique ID for this tab
-            const viewerRef = push(viewersRef);
 
-            // Remove this viewer when they disconnect
-            onDisconnect(viewerRef).remove();
+/* =========================================================
+   FIREBASE CLOUD MESSAGING
+   ========================================================= */
 
-            // Add this viewer
-            return set(viewerRef, {
-                online: true,
-                timestamp: Date.now()
-            });
+let messaging = null;
 
-        })
+try {
 
-        .catch((error) => {
+    messaging =
+        getMessaging(app);
 
-            console.error(
-                "Firebase anonymous login failed:",
-                error
+} catch (error) {
+
+    console.error(
+        "Firebase Messaging initialization failed:",
+        error
+    );
+}
+
+
+/* =========================================================
+   PAGE LOAD TIME
+   ========================================================= */
+
+const pageLoadedAt =
+    Date.now();
+
+
+/* =========================================================
+   SERVICE WORKER + PUSH REGISTRATION
+   ========================================================= */
+
+async function setupPushNotifications() {
+
+    if (!messaging) {
+        return;
+    }
+
+    if (
+        !("serviceWorker" in navigator) ||
+        !("Notification" in window)
+    ) {
+
+        console.warn(
+            "This browser does not support push notifications."
+        );
+
+        return;
+    }
+
+
+    if (
+        VAPID_PUBLIC_KEY ===
+        "PASTE_YOUR_PUBLIC_VAPID_KEY_HERE"
+    ) {
+
+        console.warn(
+            "VAPID public key has not been configured."
+        );
+
+        return;
+    }
+
+
+    try {
+
+        /*
+         * Register Firebase's messaging service worker.
+         */
+
+        const registration =
+            await navigator.serviceWorker.register(
+                "/firebase-messaging-sw.js"
             );
+
+
+        /*
+         * Ask the visitor for notification permission.
+         */
+
+        const permission =
+            await Notification.requestPermission();
+
+
+        if (permission !== "granted") {
+
+            console.log(
+                "Notification permission was not granted."
+            );
+
+            return;
+        }
+
+
+        /*
+         * Get this browser's FCM token.
+         */
+
+        const token =
+            await getToken(
+                messaging,
+                {
+                    vapidKey:
+                        VAPID_PUBLIC_KEY,
+
+                    serviceWorkerRegistration:
+                        registration
+                }
+            );
+
+
+        if (!token) {
+
+            console.warn(
+                "No FCM registration token available."
+            );
+
+            return;
+        }
+
+
+        console.log(
+            "FCM token registered:",
+            token
+        );
+
+
+        /*
+         * Save this browser's token in Realtime Database.
+         *
+         * Your admin/backend can use these tokens
+         * to send notifications to everyone.
+         */
+
+        const tokenRef =
+            ref(
+                db,
+                "notificationTokens/" +
+                encodeURIComponent(token)
+            );
+
+
+        await set(tokenRef, {
+
+            token: token,
+
+            createdAt:
+                Date.now(),
+
+            userAgent:
+                navigator.userAgent
+
+        });
+
+        console.log(
+            "Push notification receiver registered."
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Push notification setup failed:",
+            error
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   FOREGROUND FCM MESSAGE
+   ========================================================= */
+
+if (messaging) {
+
+    onMessage(
+        messaging,
+        (payload) => {
+
+            console.log(
+                "Foreground push received:",
+                payload
+            );
+
+
+            const message =
+                payload?.notification?.body ||
+                payload?.data?.message;
+
+
+            if (message) {
+
+                showLiveNotification(
+                    message
+                );
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   ANONYMOUS LOGIN
+   ========================================================= */
+
+signInAnonymously(auth)
+
+    .then(async () => {
+
+        console.log(
+            "Firebase anonymous login successful."
+        );
+
+
+        /*
+         * Viewer counter
+         */
+
+        const viewersRef =
+            ref(db, "viewers");
+
+
+        const viewerRef =
+            push(viewersRef);
+
+
+        onDisconnect(viewerRef)
+            .remove();
+
+
+        await set(viewerRef, {
+
+            online: true,
+
+            timestamp:
+                Date.now()
 
         });
 
 
-    // Watch the viewer list
+        /*
+         * Set up push notifications after
+         * authentication is complete.
+         */
 
-    const viewersRef = ref(db, "viewers");
+        await setupPushNotifications();
 
-    onValue(viewersRef, (snapshot) => {
+    })
 
-        const viewers = snapshot.val();
+    .catch((error) => {
 
-        const count = viewers
-            ? Object.keys(viewers).length
-            : 0;
-
-        const viewerNumber =
-            document.getElementById("viewer-number");
-
-        if (viewerNumber) {
-            viewerNumber.textContent = count;
-        }
-
-    });
-
-
-    // =========================
-    // LIVE NOTIFICATION RECEIVER
-    // =========================
-
-    const notificationsRef =
-        ref(db, "notifications");
-
-
-    onChildAdded(notificationsRef, (snapshot) => {
-
-        const notification = snapshot.val();
-
-        // Make sure the notification has
-        // the information we expect.
-
-        if (!notification) {
-            return;
-        }
-
-        if (!notification.message) {
-            return;
-        }
-
-        // Don't show old notifications
-        // to people who just opened the page.
-
-        if (
-            notification.timestamp &&
-            notification.timestamp <= pageLoadedAt
-        ) {
-            return;
-        }
-
-
-        // Show the notification
-
-        showLiveNotification(
-            notification.message
+        console.error(
+            "Firebase anonymous login failed:",
+            error
         );
 
     });
 
 
-    // =========================
-    // SHOW LIVE NOTIFICATION
-    // =========================
+/* =========================================================
+   LIVE VIEWER COUNT
+   ========================================================= */
 
-    function showLiveNotification(message) {
+const viewersRef =
+    ref(db, "viewers");
+
+
+onValue(
+    viewersRef,
+    (snapshot) => {
+
+        const viewers =
+            snapshot.val();
+
+
+        const count =
+            viewers
+                ? Object.keys(viewers).length
+                : 0;
+
+
+        const viewerNumber =
+            document.getElementById(
+                "viewer-number"
+            );
+
+
+        if (viewerNumber) {
+
+            viewerNumber.textContent =
+                count;
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   REALTIME DATABASE NOTIFICATIONS
+   =========================================================
+
+   This is kept in addition to FCM.
+
+   It makes your notification popup work immediately
+   when the webpage is open.
+   ========================================================= */
+
+const notificationsRef =
+    ref(db, "notifications");
+
+
+onChildAdded(
+    notificationsRef,
+    (snapshot) => {
 
         const notification =
-            document.getElementById("notification");
+            snapshot.val();
 
-        const messageElement =
-            document.getElementById("notificationMessage");
 
-        if (!notification || !messageElement) {
+        if (!notification) {
             return;
         }
 
 
-        // Put the admin's message into
-        // the notification box.
-
-        messageElement.textContent = message;
-
-
-        // Show it
-
-        notification.classList.add("show");
+        if (!notification.message) {
+            return;
+        }
 
 
-        // Automatically hide after 8 seconds
+        /*
+         * Don't display notifications that existed
+         * before this page was opened.
+         */
 
-        setTimeout(() => {
+        if (
+            notification.timestamp &&
+            notification.timestamp <= pageLoadedAt
+        ) {
 
-            notification.classList.remove("show");
+            return;
 
-        }, 8000);
+        }
+
+
+        showLiveNotification(
+            notification.message
+        );
+
+    }
+);
+
+
+/* =========================================================
+   SHOW LIVE POPUP
+   ========================================================= */
+
+function showLiveNotification(message) {
+
+    const notification =
+        document.getElementById(
+            "notification"
+        );
+
+
+    const messageElement =
+        document.getElementById(
+            "notificationMessage"
+        );
+
+
+    if (
+        !notification ||
+        !messageElement
+    ) {
+
+        return;
 
     }
 
 
-    // =========================
-    // CLOSE NOTIFICATION
-    // =========================
+    messageElement.textContent =
+        message;
 
-    const closeButton =
-        document.getElementById("notificationClose");
 
-    closeButton.addEventListener("click", () => {
+    notification.classList.add(
+        "show"
+    );
 
-        const notification =
-            document.getElementById("notification");
 
-        notification.classList.remove("show");
+    /*
+     * Clear any previous timer.
+     */
 
-    });
+    if (
+        notification.hideTimer
+    ) {
+
+        clearTimeout(
+            notification.hideTimer
+        );
+
+    }
+
+
+    notification.hideTimer =
+        setTimeout(() => {
+
+            notification.classList.remove(
+                "show"
+            );
+
+        }, 8000);
+
+}
+
+
+/* =========================================================
+   CLOSE POPUP
+   ========================================================= */
+
+const closeButton =
+    document.getElementById(
+        "notificationClose"
+    );
+
+
+if (closeButton) {
+
+    closeButton.addEventListener(
+        "click",
+        () => {
+
+            const notification =
+                document.getElementById(
+                    "notification"
+                );
+
+
+            notification.classList.remove(
+                "show"
+            );
+
+        }
+    );
+
+}
 
 </script>
 
-<!-- =========================
+<!-- =========================================================
      WISHLIST
-     ========================= -->
+     ========================================================= -->
 
 <script>
 
-    const wishlist = [
+const wishlist = [
 
-        {
-            name: "AMD Ryzen 5 7600X",
-            description: "New CPU, (IF YOU BUY ME THIS, I WILL ALSO NEED THE MSI MAG X870E TOMAHAWK WIFI AND (2X16) DDR5 5000mhz Corsair Vengence RAM)",
-            price: "$210.99",
-            link: "https://www.bestbuy.com/product/amd-ryzen-5-7600x-6-core-12-thread-4-7ghz-5-3-ghz-max-boost-socket-am5-pci-express-5-0-unlocked-desktop-processor-silver/JXKQHH52CT/sku/6519479"
-        },
+    {
+        name: "AMD Ryzen 5 7600X",
 
-        {
-            name: "MSI Mag X870E Tomahawk",
-            description: "New Motherboard, (IF YOU BUY ME THIS, I WILL ALSO NEED THE AMD RYZEN 5 7600X AND (2X16) DDR5 5000mhz Corsair Vengence RAM)",
-            price: "$269.99",
-            link: "https://www.bestbuy.com/product/msi-mag-x870e-tomahawk-wifi-socket-am5-amd-x870-atx-ddr5-wi-fi-7-motherboard-black/J3P7TX6LJP/sku/6616917"
-        },
+        description:
+            "New CPU, (IF YOU BUY ME THIS, I WILL ALSO NEED THE MSI MAG X870E TOMAHAWK WIFI AND (2X16) DDR5 5000mhz Corsair Vengence RAM)",
 
-        {
-            name: "(2X16) DDR5 5000mhz Corsair Vengence RAM",
-            description: "DDR5 RAM, (IF YOU BUY ME THIS, I WILL ALSO NEED THE MSI MAG X870E TOMAHAWK WIFI AND AMD RYZEN 5 7600X)",
-            price: "$499.99",
-            link: "https://www.corsair.com/us/en/p/memory/cmh32gx5m2b5200z40k/vengeance-rgb-32gb-2x16gb-ddr5-dram-5200mt-s-c40-amd-expo-memory-kit-cmh32gx5m2b5200z40k"
-        },
+        price:
+            "$210.99",
 
-        {
-            name: "HyperX Cloud III",
-            description: "New Headphones!",
-            price: "$79.99",
-            link: "https://hyperx.com/products/hyperx-cloud-iii-wired-gaming-headset?variant=43656365375645"
-        },
+        link:
+            "https://www.bestbuy.com/product/amd-ryzen-5-7600x-6-core-12-thread-4-7ghz-5-3-ghz-max-boost-socket-am5-pci-express-5-0-unlocked-desktop-processor-silver/JXKQHH52CT/sku/6519479"
+    },
 
-        {
-            name: "Full Carbon Phone Case",
-            description: "Full Carbon Phone Case",
-            price: "$129.99",
-            link: "https://carbon-cover.de/en/products/carbon-cover-iphone-16e?variant=50455289102677"
-        },
+    {
+        name:
+            "MSI Mag X870E Tomahawk",
 
-        {
-            name: "Valve Index Rear Strap Replacement Kit",
-            description: "My rear strap on my Valve Index has spring blowout, so I need to replace it!",
-            price: "$119.99",
-            link: "https://www.ifixit.com/products/valve-index-headset-head-strap"
-        },
+        description:
+            "New Motherboard, (IF YOU BUY ME THIS, I WILL ALSO NEED THE AMD RYZEN 5 7600X AND (2X16) DDR5 5000mhz Corsair Vengence RAM)",
 
-        {
-            name: "Raspberry Pi",
-            description: "A small computer to toy around with, it could fit in your hand!",
-            price: "$254.99",
-            link: "https://vilros.com/products/vilros-raspberry-pi-5-basic-starter-kit?variant=41190370771038"
-        }
+        price:
+            "$269.99",
 
-    ];
+        link:
+            "https://www.bestbuy.com/product/msi-mag-x870e-tomahawk-wifi-socket-am5-amd-x870-atx-ddr5-wi-fi-7-motherboard-black/J3P7TX6LJP/sku/6616917"
+    },
+
+    {
+        name:
+            "(2X16) DDR5 5000mhz Corsair Vengence RAM",
+
+        description:
+            "DDR5 RAM, (IF YOU BUY ME THIS, I WILL ALSO NEED THE MSI MAG X870E TOMAHAWK WIFI AND AMD RYZEN 5 7600X)",
+
+        price:
+            "$499.99",
+
+        link:
+            "https://www.corsair.com/us/en/p/memory/cmh32gx5m2b5200z40k/vengeance-rgb-32gb-2x16gb-ddr5-dram-5200mt-s-c40-amd-expo-memory-kit-cmh32gx5m2b5200z40k"
+    },
+
+    {
+        name:
+            "HyperX Cloud III",
+
+        description:
+            "New Headphones!",
+
+        price:
+            "$79.99",
+
+        link:
+            "https://hyperx.com/products/hyperx-cloud-iii-wired-gaming-headset?variant=43656365375645"
+    },
+
+    {
+        name:
+            "Full Carbon Phone Case",
+
+        description:
+            "Full Carbon Phone Case",
+
+        price:
+            "$129.99",
+
+        link:
+            "https://carbon-cover.de/en/products/carbon-cover-iphone-16e?variant=50455289102677"
+    },
+
+    {
+        name:
+            "Valve Index Rear Strap Replacement Kit",
+
+        description:
+            "My rear strap on my Valve Index has spring blowout, so I need to replace it!",
+
+        price:
+            "$119.99",
+
+        link:
+            "https://www.ifixit.com/products/valve-index-headset-head-strap"
+    },
+
+    {
+        name:
+            "Raspberry Pi",
+
+        description:
+            "A small computer to toy around with, it could fit in your hand!",
+
+        price:
+            "$254.99",
+
+        link:
+            "https://vilros.com/products/vilros-raspberry-pi-5-basic-starter-kit?variant=41190370771038"
+    }
+
+];
 
 
-    // =========================
-    // CREATE WISHLIST ITEMS
-    // =========================
+/* =========================================================
+   CREATE WISHLIST
+   ========================================================= */
 
-    const container =
-        document.getElementById("wishlist");
+const container =
+    document.getElementById(
+        "wishlist"
+    );
 
 
-    wishlist.forEach(item => {
+wishlist.forEach(
+    item => {
 
         const card =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
 
-        card.className = "item";
+
+        card.className =
+            "item";
 
 
         card.innerHTML = `
 
-            <h2>${item.name}</h2>
+            <h2>
+                ${item.name}
+            </h2>
 
             <div class="price">
                 ${item.price}
@@ -529,9 +933,12 @@
         `;
 
 
-        container.appendChild(card);
+        container.appendChild(
+            card
+        );
 
-    });
+    }
+);
 
 </script>
 
