@@ -108,18 +108,13 @@
         position: fixed;
         top: 20px;
         left: 20px;
-
         background: #181b24;
         border: 1px solid #292e3b;
         border-radius: 10px;
-
         padding: 9px 13px;
-
         color: white;
         font-size: 14px;
-
         box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-
         z-index: 9999;
     }
 
@@ -144,11 +139,9 @@
         min-width: 280px;
         max-width: 90vw;
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-
         transform: translateX(130%);
         opacity: 0;
         transition: all 0.4s ease;
-
         z-index: 9999;
     }
 
@@ -166,14 +159,12 @@
         position: absolute;
         top: 8px;
         right: 10px;
-
         background: transparent;
         border: none;
         color: #9ca3af;
         font-size: 22px;
         line-height: 1;
         cursor: pointer;
-
         padding: 2px 5px;
         border-radius: 6px;
     }
@@ -191,7 +182,7 @@
 <!-- LIVE VIEWER COUNTER -->
 
 <div id="viewer-count">
-     <span id="viewer-number">1</span> viewing
+    <span id="viewer-number">1</span> viewing
 </div>
 
 <header>
@@ -237,6 +228,11 @@
         onDisconnect
     } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-database.js";
 
+    import {
+        getAuth,
+        signInAnonymously
+    } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
+
 
     // Firebase configuration
 
@@ -258,25 +254,41 @@
 
     const db = getDatabase(app);
 
-
-    // Give every visitor a unique ID
-
-    const viewerId = crypto.randomUUID();
-
-    const viewerRef = ref(db, `viewers/${viewerId}`);
+    const auth = getAuth(app);
 
 
-    // Add this visitor to the database
+    // Sign this visitor in anonymously
 
-    set(viewerRef, {
-        online: true,
-        timestamp: Date.now()
-    });
+    signInAnonymously(auth)
+        .then((userCredential) => {
+
+            const viewerId = userCredential.user.uid;
+
+            const viewerRef =
+                ref(db, `viewers/${viewerId}`);
 
 
-    // Automatically remove this visitor when they leave
+            // Add this visitor
 
-    onDisconnect(viewerRef).remove();
+            set(viewerRef, {
+                online: true,
+                timestamp: Date.now()
+            });
+
+
+            // Remove visitor when they leave
+
+            onDisconnect(viewerRef).remove();
+
+        })
+        .catch((error) => {
+
+            console.error(
+                "Firebase anonymous login failed:",
+                error
+            );
+
+        });
 
 
     // Watch the viewer list
@@ -297,25 +309,8 @@
             document.getElementById("viewer-number");
 
 
-        const viewerCount =
-            document.getElementById("viewer-count");
-
-
         if (viewerNumber) {
             viewerNumber.textContent = count;
-        }
-
-
-        if (viewerCount) {
-
-            if (count === 1) {
-                viewerCount.innerHTML =
-                    `<span id="viewer-number">${count}</span> viewing`;
-            } else {
-                viewerCount.innerHTML =
-                    `<span id="viewer-number">${count}</span> viewing`;
-            }
-
         }
 
     });
