@@ -14,16 +14,25 @@ firebase.initializeApp({
 const messaging = firebase.messaging();
 
 messaging.onBackgroundMessage((payload) => {
+
+    console.log("Background FCM message:", payload);
+
     const title =
         payload.notification?.title ||
+        payload.data?.title ||
         "Miataness' Wishlist";
 
-    const options = {
-        body:
-            payload.notification?.body ||
-            payload.data?.message ||
-            "You have a new notification!"
-    };
+    const body =
+        payload.notification?.body ||
+        payload.data?.message ||
+        "You have a new notification!";
 
-    self.registration.showNotification(title, options);
+    self.registration.showNotification(title, {
+        body: body,
+        icon: "/Wishlist/icon.png",
+        badge: "/Wishlist/icon.png",
+        tag: "wishlist-notification",
+        renotify: true
+    });
+
 });
