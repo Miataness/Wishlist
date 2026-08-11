@@ -220,7 +220,7 @@
 </button>
 
 <div class="notification-message">
-    SUSPECTED DOWNTIME, POTENTIALLY ADDING LIVE USER COUNTER
+    User counter added!, This webpage is constantly changing, drop in any time!
 </div>
 ```
 
@@ -285,25 +285,12 @@
 
         .then(() => {
 
-            /*
-             * IMPORTANT:
-             *
-             * Do NOT use the Firebase user's UID
-             * as the viewer ID.
-             *
-             * Firebase can reuse the same anonymous
-             * account on the same device/browser.
-             *
-             * push() gives EVERY PAGE its own ID.
-             */
-
             const viewersRef = ref(db, "viewers");
 
             // Create a unique ID for THIS page/tab
             const viewerRef = push(viewersRef);
 
-            // Tell Firebase to remove this viewer
-            // when the page disconnects.
+            // Tell Firebase to remove this viewer when the page disconnects.
             onDisconnect(viewerRef).remove();
 
 
